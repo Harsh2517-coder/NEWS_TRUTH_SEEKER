@@ -1,0 +1,18 @@
+# netlify.toml
+
+[build]
+  # This command installs your Python dependencies.
+  command = "pip install -r requirements.txt"
+  
+  # The directory where your built frontend site is. 
+  # This is often 'public', 'dist', or 'build'. Yours looks like 'public'.
+  publish = "public"
+
+  # The directory where your serverless functions are.
+  functions = "netlify/functions"
+
+# This rule rewrites API requests to your Python function.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200

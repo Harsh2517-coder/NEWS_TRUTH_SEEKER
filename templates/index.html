@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightLens: News Truth Seeker - Advanced Bias Detection</title>
+    <meta name="description" content="Analyze news articles for bias, political leaning, and source reliability with advanced AI-powered insights. Supports multiple languages and provides detailed sentiment analysis.">
+    <meta name="keywords" content="news analysis, bias detection, political sentiment, fact checking, media literacy">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="InsightLens: News Truth Seeker">
+    <meta property="og:description" content="Advanced AI-powered news bias detection and analysis tool">
+    <meta property="og:image" content="/static/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="InsightLens: News Truth Seeker">
+    <meta property="twitter:description" content="Advanced AI-powered news bias detection and analysis tool">
+    
+    <link rel="canonical" href="/">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <nav class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-search-plus"></i>
+                    <h1>InsightLens</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Uncover the Truth Behind 
+                    <span class="gradient-text">News Articles</span>
+                </h1>
+                <p class="hero-description">
+                    Advanced AI-powered analysis to detect bias, political leaning, and source reliability. 
+                    Get deeper insights into news content with our sophisticated sentiment analysis engine.
+                </p>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Bias Detection</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-globe"></i>
+                        <span>Multi-Language</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Source Reliability</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis Interface -->
+        <main class="main-content">
+            <div class="analysis-container">
+                <!-- Input Mode Selection -->
+                <div class="input-mode-selector">
+                    <button class="mode-btn active" data-mode="url">
+                        <i class="fas fa-link"></i>
+                        <span>Analyze URL</span>
+                    </button>
+                    <button class="mode-btn" data-mode="text">
+                        <i class="fas fa-edit"></i>
+                        <span>Paste Text</span>
+                    </button>
+                    <button class="mode-btn" data-mode="file">
+                        <i class="fas fa-file-upload"></i>
+                        <span>Upload File</span>
+                    </button>
+                </div>
+
+                <!-- URL Input -->
+                <div id="url-input" class="input-section active">
+                    <div class="input-group">
+                        <label for="news-url" class="input-label">
+                            <i class="fas fa-link"></i>
+                            Enter News Article URL
+                        </label>
+                        <div class="url-input-container">
+                            <input 
+                                type="url" 
+                                id="news-url" 
+                                class="url-input" 
+                                placeholder="https://example.com/news-article"
+                                autocomplete="url"
+                            >
+                            <button id="analyze-url" class="analyze-btn">
+                                <i class="fas fa-search"></i>
+                                <span>Analyze</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Input -->
+                <div id="text-input" class="input-section">
+                    <div class="input-group">
+                        <label for="article-title" class="input-label">
+                            <i class="fas fa-heading"></i>
+                            Article Title (Optional)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="article-title" 
+                            class="text-input" 
+                            placeholder="Enter article title..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <div class="input-group">
+                        <label for="article-text" class="input-label">
+                            <i class="fas fa-align-left"></i>
+                            Article Content
+                        </label>
+                        <textarea 
+                            id="article-text" 
+                            class="text-area" 
+                            placeholder="Paste your news article content here..."
+                            rows="8"
+                        ></textarea>
+                    </div>
+                    <button id="analyze-text" class="analyze-btn">
+                        <i class="fas fa-search"></i>
+                        <span>Analyze Text</span>
+                    </button>
+                </div>
+
+                <!-- File Upload -->
+                <div id="file-input" class="input-section">
+                    <div class="file-upload-area" id="file-drop-area">
+                        <div class="file-upload-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Upload Document</h3>
+                            <p>Drag and drop your file here or click to browse</p>
+                            <p class="file-types">Supported: PDF, TXT (max 16MB)</p>
+                            <input type="file" id="file-input-element" accept=".pdf,.txt" hidden>
+                            <button class="browse-btn">Browse Files</button>
+                        </div>
+                    </div>
+                    <div id="file-info" class="file-info" style="display: none;">
+                        <div class="file-details">
+                            <i class="fas fa-file"></i>
+                            <span class="file-name"></span>
+                            <button class="remove-file">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button id="analyze-file" class="analyze-btn" style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <span>Analyze File</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading" class="loading-overlay" style="display: none;">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <h3>Analyzing Article</h3>
+                    <p>Our AI is processing your content...</p>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="results-section" style="display: none;">
+                <!-- Results content will be populated by JavaScript -->
+            </div>
+
+            <!-- Error Display -->
+            <div id="error" class="error-section" style="display: none;">
+                <div class="error-content">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Analysis Failed</h3>
+                    <p id="error-message"></p>
+                    <button id="try-again" class="retry-btn">Try Again</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="features-container">
+                <h2 class="section-title">Powerful Analysis Features</h2>
+                <div class="features-grid">
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3>Bias Detection</h3>
+                        <p>Advanced sentiment analysis to identify political bias and emotional tone in news articles.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>Political Sentiment</h3>
+                        <p>Analyze sentiment toward different political parties and entities mentioned in the content.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h3>Source Reliability</h3>
+                        <p>Assess the credibility and reliability of news sources based on our comprehensive database.</p>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Multi-Language Support</h3>
+                        <p>Process articles in multiple languages with automatic translation and analysis.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>InsightLens</h3>
+                    <p>Empowering media literacy through advanced AI analysis</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Bias Detection</li>
+                        <li>Political Analysis</li>
+                        <li>Source Verification</li>
+                        <li>Multi-Language Support</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li>Documentation</li>
+                        <li>API Reference</li>
+                        <li>Research Papers</li>
+                        <li>Privacy Policy</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 InsightLens. All rights reserved. Powered by Advanced NLP & Machine Learning.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
